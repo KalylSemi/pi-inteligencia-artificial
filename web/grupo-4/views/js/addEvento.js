@@ -32,11 +32,11 @@ document.getElementById("cep").addEventListener("blur", function () {
     }
 });
 
-async function postEvent(event) {
+const postEvent = async (event) => {
     event.preventDefault();
 
     const eventosEndpoint = '/eventos';
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`;
+    const URLCompleta = `http://localhost:3004${eventosEndpoint}`;
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -47,60 +47,34 @@ async function postEvent(event) {
     let organizador;
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        if (payload.login) {
-            organizador = payload.login;
-        } else if (payload.nome_empresa) {
-            organizador = payload.nome_empresa;
-        } else {
-            throw new Error("Organizador não encontrado no token");
-        }
+        organizador = payload.login || payload.nome_empresa || "Organizador desconhecido";
     } catch (error) {
         console.error("Erro ao decodificar o token:", error);
         exibirAlerta('error', 'Token inválido. Faça login novamente.');
         return;
     }
 
-    const nome = document.querySelector('#nomeEvento').value;
-    const data_inicio = document.querySelector('#dataInicio').value;
-    const categoria = document.querySelector('#categoria').value;
-    const descricao = document.querySelector('#descricao').value;
-    const url_banner = document.querySelector('#banner').value;
-    const preco = parseFloat(document.querySelector('#precoIngresso').value);
-    const estado = document.querySelector('#estado').value;
-    const cidade = document.querySelector('#cidade').value;
-    const endereco = document.querySelector('#endereco').value;
-    const numero = document.querySelector('#numero').value;
-
-    if (!nome || !data_inicio || !categoria || !descricao || !url_banner || isNaN(preco) || !estado || !cidade || !endereco || !numero) {
-        exibirAlerta('error', 'Preencha todos os campos corretamente');
-        return;
-    }
-
-    // Validação da data de início
-    const dataAtual = new Date(); // Data atual
-    const dataInicio = new Date(data_inicio); // Data do evento
-
-    // Garantir que a data do evento seja hoje ou no futuro
-    if (dataInicio < dataAtual.setHours(0, 0, 0, 0)) {
-        exibirAlerta('error', 'Data de início inválida');
-        return;
-    }
+    // Pegando os campos do formulário
+    const formData = new FormData();
+    formData.append('nome', document.querySelector('#nomeEvento').value);
+    formData.append('data_inicio', document.querySelector('#dataInicio').value);
+    formData.append('categoria', document.querySelector('#categoria').value);
+    formData.append('descricao', document.querySelector('#descricao').value);
+    formData.append('prompt', document.querySelector('#imagemPrompt').value);
+    formData.append('banner', document.querySelector('#banner').files[0]); // Arquivo
+    formData.append('preco', parseFloat(document.querySelector('#precoIngresso').value));
+    formData.append('estado', document.querySelector('#estado').value);
+    formData.append('cidade', document.querySelector('#cidade').value);
+    formData.append('endereco', document.querySelector('#endereco').value);
+    formData.append('numero', document.querySelector('#numero').value);
+    formData.append('organizador', organizador);
 
     try {
-        const response = await axios.post(URLCompleta, {
-            nome,
-            data_inicio,
-            categoria,
-            descricao,
-            url_banner,
-            preco,
-            organizador,
-            estado,
-            cidade,
-            endereco,
-            numero
-        }, {
-            headers: { Authorization: `Bearer ${token}` }
+        const response = await axios.post(URLCompleta, formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
         });
 
         exibirAlerta('success', 'Evento cadastrado com sucesso!');
@@ -108,7 +82,7 @@ async function postEvent(event) {
         console.error("Erro ao cadastrar evento:", error);
         exibirAlerta('error', 'Erro ao cadastrar evento');
     }
-}
+};
 
 // Função para exibir alertas
 function exibirAlerta(tipo, mensagem) {
@@ -124,3 +98,17 @@ function exibirAlerta(tipo, mensagem) {
 
 const formularioEvento = document.querySelector('#formEvento');
 formularioEvento.addEventListener('submit', postEvent);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const promptInput = document.querySelector("#imagemPrompt");
+    const fileInput = document.querySelector("#banner");
+
+    // Desativar um campo quando o outro for preenchido
+    promptInput.addEventListener("input", () => {
+        fileInput.disabled = promptInput.value.trim().length > 0;
+    });
+
+    fileInput.addEventListener("change", () => {
+        promptInput.disabled = fileInput.files.length > 0;
+    });
+});

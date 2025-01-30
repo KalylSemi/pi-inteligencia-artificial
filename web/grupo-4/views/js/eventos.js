@@ -1,6 +1,6 @@
 async function obterEventos() {
     const eventosEndpoint = '/eventos';
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`;
+    const URLCompleta = `http://localhost:3004${eventosEndpoint}`;
 
     try {
         // Faz a requisição GET para o servidor
@@ -24,7 +24,7 @@ async function obterEventos() {
             // Adiciona a imagem do evento
             let imagem = document.createElement('img');
             imagem.classList.add('okt-img');
-            imagem.src = evento.url_banner;
+            imagem.src = `data:${evento.banner.contentType};base64,${evento.banner.data}`; // Ajuste aqui
             imagem.alt = evento.nome;
 
             let titulo = document.createElement('h5');

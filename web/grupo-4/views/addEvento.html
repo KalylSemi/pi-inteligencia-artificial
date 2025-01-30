@@ -63,7 +63,7 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <form id="formEvento">
+                <form id="formEvento" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="nomeEvento" class="form-label">Nome do evento</label>
                         <input type="text" class="form-control" id="nomeEvento" placeholder="Digite o nome do evento"
@@ -93,10 +93,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="banner" class="form-label">URL do banner</label>
-                        <input type="url" class="form-control" id="banner"
-                            placeholder="Ex.: https://example.com/banner.jpg" required>
+                        <label for="banner" class="form-label">Banner do evento</label>
+                        <input type="file" class="form-control" id="banner" accept="image/*">
                     </div>
+
+                    <div class="mb-3">
+                        <label for="imagemPrompt" class="form-label">Caso não possua banner, gere um vira IA</label>
+                        <input type="text" class="form-control" id="imagemPrompt" placeholder="Descreva o banner do evento">
+                    </div>               
 
                     <div class="mb-3">
                         <label for="precoIngresso" class="form-label">Preço do ingresso</label>

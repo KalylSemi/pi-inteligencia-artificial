@@ -5,7 +5,10 @@ const EventoSchema = mongoose.Schema({
     data_inicio: Date,
     categoria: String,
     descricao: String,
-    url_banner: String,
+    banner: {
+        data: Buffer,
+        contentType: String
+    },
     preco: Number,
     organizador: String,
     estado: String,

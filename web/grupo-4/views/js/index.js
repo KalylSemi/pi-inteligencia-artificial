@@ -1,21 +1,16 @@
 // Função para obter os eventos
 async function obterEventos() {
     const eventosEndpoint = '/eventos';
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`;
+    const URLCompleta = `http://localhost:3004${eventosEndpoint}`;
 
     try {
-        // Faz a requisição GET para o servidor
         const eventos = (await axios.get(URLCompleta)).data;
-
         eventos.reverse();
-
         const ultimosEventos = eventos.slice(0, 4);
 
         const eventosContainer = document.querySelector('#eventosContainer');
-
         eventosContainer.innerHTML = '';
 
-        // Itera sobre os eventos recebidos do servidor (somente os 4 mais recentes)
         for (let evento of ultimosEventos) {
             let coluna = document.createElement('div');
             coluna.classList.add('col-md-3', 'mb-4');
@@ -28,12 +23,12 @@ async function obterEventos() {
 
             let imagem = document.createElement('img');
             imagem.classList.add('okt-img');
-            imagem.src = evento.url_banner; 
-            imagem.alt = evento.nome; 
+            imagem.src = `data:${evento.banner.contentType};base64,${evento.banner.data}`; // Ajuste aqui
+            imagem.alt = evento.nome;
 
             let titulo = document.createElement('h5');
             titulo.classList.add('mt-0');
-            titulo.innerText = evento.nome; 
+            titulo.innerText = evento.nome;
 
             let botao = document.createElement('button');
             botao.classList.add('btn', 'btn-danger');
@@ -58,7 +53,7 @@ async function obterEventos() {
 // Função para obter os eventos com estado "SP"
 async function obterEventosSP() {
     const eventosEndpoint = '/eventos';
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`;
+    const URLCompleta = `http://localhost:3004${eventosEndpoint}`;
 
     try {
         // Faz a requisição GET para o servidor
@@ -85,7 +80,7 @@ async function obterEventosSP() {
 
             let imagem = document.createElement('img');
             imagem.classList.add('okt-img');
-            imagem.src = evento.url_banner;
+            imagem.src = `data:${evento.banner.contentType};base64,${evento.banner.data}`; // Ajuste aqui
             imagem.alt = evento.nome; 
 
             let titulo = document.createElement('h5');
@@ -114,7 +109,7 @@ async function obterEventosSP() {
 
 async function obterOrganizadores() {
     const organizadoresEndpoint = '/organizadores'; // Endpoint para buscar organizadores
-    const URLCompleta = `http://localhost:3000${organizadoresEndpoint}`; // URL completa da API
+    const URLCompleta = `http://localhost:3004${organizadoresEndpoint}`; // URL completa da API
 
     try {
         const organizadores = (await axios.get(URLCompleta)).data;

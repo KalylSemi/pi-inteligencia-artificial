@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/eventos/${eventoId}`);
+        const response = await fetch(`http://localhost:3004/eventos/${eventoId}`);
         if (!response.ok) {
             throw new Error(`Erro ao buscar evento: ${response.status}`);
         }
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const evento = await response.json();
 
         document.getElementById("event-title").textContent = evento.nome;
-        document.getElementById("event-banner").src = evento.url_banner;
+        document.getElementById("event-banner").src = `data:${evento.banner.contentType};base64,${evento.banner.data}`;
         document.getElementById("event-organizer").textContent = evento.organizador;
         document.getElementById("event-date").textContent =
             new Date(evento.data_inicio).toLocaleDateString("pt-BR", {
