@@ -11,3 +11,35 @@
 ## Tela Inicial com os dois tipos de imagens disponíveis
 
 ![home](/img-readme/home.png)
+
+## Quer realizar o teste? Siga o passo a passo abaixo
+
+- No diretório `/api/grupo-4`, edite o nome do arquivo **.envExample** para **.env** e insira a sua api-key da OpenAI.
+
+- No terminal desse mesmo diretório, digite:
+
+```bash
+npm install
+```
+
+- Em seguida, digite:
+
+```bash
+npm start
+```
+
+- Agora, no diretório `/web/grupo-4`, no terminal, digite:
+
+```bash
+npm install
+```
+
+- Em seguida, digite:
+
+```bash
+npm start
+```
+
+- Para acessar a interface, vá até o navegador e digite `localhost:8084`
+
+## E pronto! Agora você conseguir usufruir dos recursos da aplicação.
